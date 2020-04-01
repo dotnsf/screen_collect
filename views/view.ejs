@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<title><%= room %> - View</title>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/qrcode.min.js"></script>
+
+<link href="/colorbox.css" rel="stylesheet"/>
+<script src="/jquery.colorbox-min.js"></script>
+
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+<link rel="shortcut icon" href="/icon.png" type="image/png"/>
+<link rel="icon" href="/icon.png" type="image/png"/>
+<link rel="apple-touch-icon" href="/icon.png"/>
+
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="Screen Collect"/>
+
+<!-- // OGP tags -->
+<meta property="og:title" content="Screen Collect"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://screen-collect.mybluemix.net/"/>
+<meta property="og:image" content="https://screen-collect.mybluemix.net/icon.png"/>
+<meta property="og:site_name" content="Screen Collect"/>
+<meta property="og:description" content="Screen Collect : リアルタイム画面収集サービス"/>
+<!-- OGP tags // -->
+
+<!-- // Twitter Card -->
+<meta property="twitter:card" content="summary"/>
+<meta property="twitter:site" content="@dotnsf"/>
+<meta property="twitter:creator" content="@dotnsf"/>
+<meta property="twitter:url" content="https://screen-collect.mybluemix.net/"/>
+<meta property="twitter:image" content="https://screen-collect.mybluemix.net/icon.png"/>
+<meta property="twitter:title" content="Screen Collect"/>
+<meta property="twitter:description" content="Screen Collect : リアルタイム画面収集サービス"/>
+<!-- Twitter Card // -->
+
+<style type="text/css">
+html, body{
+  text-align: center;
+  background-color: #fafafa;
+  font-size: 20px;
+  color: #333;
+}
+.mycanvas{
+  border: 1px solid #333;
+}
+.card-columns{
+  @include media-breakpoint-only(xl){
+    column-count: 5;
+  }
+  @include media-breakpoint-only(lg){
+    column-count: 4;
+  }
+  @include media-breakpoint-only(md){
+    column-count: 3;
+  }
+}
+.card-group .card{
+  /*max-width: 20%;*/
+  /*max-width: 16%;*/
+  max-width: calc(100% /<%= columns %>);
+}
+</style>
+</head>
+<body>
+
+<canvas id="qrcode"></canvas>
+
+<div id="card-groups">
+  <div class="card-group" id="cards-1">
+  </div>
+</div>
+
+<div style="display:none;">
+  <div id="box_content">
+  </div>
+</div>
+
+<script>
+var socketio = null;
+var socket_ids = [];
+
+var base_url = location.origin + '/';
+
+var row = 1;
+var cnt = 0;
+
+$(function(){
+  socketio = io.connect();
+
+  init();
+
+  /*
+  QRCode.toCanvas( document.getElementById( 'qrcode' ), base_url + '?room=<%= room %>', function( err ){
+    if( err ){ console.log( err ); }
+  });
+  */
+
+  socketio.on( 'init_client_view', function( msg ){
+    var socket_id = msg.uuid; //msg.socket_id;
+    if( socket_ids.indexOf( socket_id ) > -1 ){
+    }else{
+      socket_ids.push( socket_id );
+      //$('#debug_ul').append( '<li id="socket_' + socket_id + '">' + socket_id + '</li>' );
+
+      var color = generateColor( msg.name );
+
+      cnt ++;
+      if( cnt > 1 && cnt % 5 == 1 ){
+        row ++;
+        $('#card-groups').append( '<div class="card-group" id="cards-' + row + '">' );
+      }
+
+      var card = '<div id="card_' + socket_id + '" class="card border-' + color + '" style="cursor: pointer;">'
+        + '<div class="card-body text-' + color + '">'
+        //+ '<h4 class="card-title">' + msg.name + '</h4>'
+        + '<h4 class="card-title"><a href="#" class="btn btn-xs btn-' + color + '" onClick="removeCard(\'card_' + socket_id + '\');">&times;</a>' + msg.name + '</h4>'
+        + '</div>'
+        + '<a href="#box_content" id="box_content_' + socket_id + '">'
+        + '<img class="card-img-bottom" id="image_' + socket_id + '" alt="(image of ' + msg.name + ')" width="315" height="330"/>'
+        + '</a>'
+        //+ '<a href="#" class="btn btn-' + color + '" onClick="removeCard(\'card_' + socket_id + '\');">&times;</a>'
+        + '</div>';
+      $('#cards-'+row).append( card );
+
+      //$('#card_'+socket_id).colorbox.remove();
+			$('#box_content_'+socket_id).colorbox({ inline: true, transition: 'none', width: "90%", height: "90%", onOpen: function(){ zoomImage( socket_id ); } });
+    }
+  });
+
+  socketio.on( 'image_client_view', function( msg ){
+    var socket_id = msg.uuid; //msg.socket_id;
+    if( socket_ids.indexOf( socket_id ) > -1 ){  //. socket_ids == [];
+      $('#image_'+socket_id).prop( 'src', msg.image_src );
+      $('#image_'+socket_id).prop( 'title', msg.comment );
+    }
+  });
+});
+
+function init(){
+  //. リサイズ時
+  //$(window).on( 'load resize', function(){
+    resized();
+  //});
+}
+
+function resized(){
+  var browserWidth = window.innerWidth;
+  var browserHeight = window.innerHeight;
+
+  socketio.emit( 'init_view', { room: '<%= room %>', width: browserWidth, height: browserHeight } );
+}
+
+
+function generateColor( name ){
+  var arr = [ 'primary', 'secondary', 'success', 'danger', 'warning', 'info', /*'light',*/ 'dark' ];
+  var r = 0;
+  for( var i = 0; i < name.length; i ++ ){
+    var c = name.charCodeAt( i );
+    r += c;
+  }
+  r = r % arr.length;
+
+  return arr[r];
+}
+
+function removeCard( card_id ){
+  $('#'+card_id).css( 'display', 'none' );
+}
+
+function zoomImage( socket_id ){
+  $('#box_content').html( '<img src="' + $('#image_'+socket_id).prop( 'src' ) + '"/>' );
+}
+</script>
+</body>
+</html>

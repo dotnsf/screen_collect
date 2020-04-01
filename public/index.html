@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<title>Screen Collect</title>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+<link rel="shortcut icon" href="/icon.png" type="image/png"/>
+<link rel="icon" href="/icon.png" type="image/png"/>
+<link rel="apple-touch-icon" href="/icon.png"/>
+
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="Screen Collect"/>
+
+<!-- // OGP tags -->
+<meta property="og:title" content="Screen Collect"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://screen-collect.mybluemix.net/"/>
+<meta property="og:image" content="https://screen-collect.mybluemix.net/icon.png"/>
+<meta property="og:site_name" content="Screen Collect"/>
+<meta property="og:description" content="Screen Collect : リアルタイム画面収集サービス"/>
+<!-- OGP tags // -->
+
+<!-- // Twitter Card -->
+<meta property="twitter:card" content="summary"/>
+<meta property="twitter:site" content="@dotnsf"/>
+<meta property="twitter:creator" content="@dotnsf"/>
+<meta property="twitter:url" content="https://screen-collect.mybluemix.net/"/>
+<meta property="twitter:image" content="https://screen-collect.mybluemix.net/icon.png"/>
+<meta property="twitter:title" content="Screen Collect"/>
+<meta property="twitter:description" content="Screen Collect : リアルタイム画面収集サービス"/>
+<!-- Twitter Card // -->
+
+<style type="text/css">
+html, body{
+  text-align: center;
+  background-color: #fafafa;
+  font-size: 20px;
+  color: #333;
+}
+.errortext{
+  border: 2px solid #f00;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <input type="text" class="form-control" id="room" value="" placeholder="Room" />
+  <input type="text" class="form-control" id="name" value="" placeholder="Your name .." />
+  <input type="button" class="btn btn-xs btn-primary" value="Start" onClick="startCollect();"/>
+</div>
+
+<script>
+$(function(){
+  var cookies = document.cookie.split( '; ' );
+  for( var i = 0; i < cookies.length; i ++ ){
+    var str = cookies[i].split( "=" );
+    if( unescape( str[0] ) == "name" ){
+      $('#name').val( unescape( str[1] ) );
+    }
+  }
+
+  var params = location.search.substring( 1 ).split( '&' );
+  params.forEach( function( param ){
+    var str = param.split( '=' );
+    if( str[0] == 'room' ){
+      $('#room').val( unescape( str[1] ) );
+    }
+  });
+});
+
+function startCollect(){
+  var room = $('#room').val();
+  if( !room ){ room = ''; }
+  var name = $('#name').val();
+  if( name ){
+    document.cookie = "name=" + name;
+    location.href = '/screen?room=' + room + '&name=' + name;
+  }else{
+    $('#name').addClass( 'errortext' );
+    //$('#name').focus();
+  }
+}
+</script>
+</body>
+</html>
