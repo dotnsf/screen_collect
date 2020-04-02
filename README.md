@@ -67,7 +67,7 @@ https://screen-collect.mybluemix.net/
 
 - User might be asked to share their screen. User can choose which application/window/full screen to share. Then click "Share" button.
 
-- Administrator can see user's selected screen image by 2000 milliseconds by default.
+- Administrator can see user's selected screen image by each 5000 milliseconds by default.
 
 - User can stop sharing when click "Stop sharing" button.
 
