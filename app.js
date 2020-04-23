@@ -35,7 +35,18 @@ app.get( '/screen', function( req, res ){
   if( !name ){ name = '' + ( new Date() ).getTime(); }
   var room = req.query.room;
   if( !room ){ room = settings.defaultroom; }
-  res.render( 'screen', { name: name, room: room, intervalms: settings.intervalms } );
+  var intervalms = settings.intervalml;
+  var _intervalms = req.query.intervalms;
+  if( _intervalms ){
+    try{
+      _intervalms = parseInt( _intervalms );
+    }catch( e ){
+    }
+  }
+  if( _intervalms ){
+    intervalms = _intervalms;
+  }
+  res.render( 'screen', { name: name, room: room, intervalms: intervalms } );
 });
 
 app.get( '/view', function( req, res ){
