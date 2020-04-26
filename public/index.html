@@ -87,6 +87,7 @@ function startCollect(){
   if( _intervalms ){
     try{
       _intervalms = parseInt( _intervalms );
+    }catch( e ){
     }
   }
   if( _intervalms ){ intervalms = _intervalms; }
