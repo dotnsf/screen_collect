@@ -72,6 +72,11 @@ https://screen-collect.mybluemix.net/
 - User can stop sharing when click "Stop sharing" button.
 
 
+## Collaborators
+
+- [Meri Nakamura](https://github.com/meri-nakamura)
+
+
 ## Copyright
 
 2020 [K.Kimura @ Juge.Me](https://github.com/dotnsf) all rights reserved.
