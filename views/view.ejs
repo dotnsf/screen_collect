@@ -125,7 +125,7 @@ $(function(){
         + '<h4 class="card-title"><a href="#" class="btn btn-xs btn-' + color + '" onClick="removeCard(\'card_' + socket_id + '\');">&times;</a>' + msg.name + '</h4>'
         + '</div>'
         + '<a href="#box_content" id="box_content_' + socket_id + '">'
-        + '<img class="card-img-bottom" id="image_' + socket_id + '" alt="(image of ' + msg.name + ')" width="315" height="330"/>'
+        + '<img class="card-img-bottom" id="image_' + socket_id + '" alt="(image of ' + msg.name + ')" ts="' + msg.timestamp + '" width="315" height="330"/>'
         + '</a>'
         //+ '<a href="#" class="btn btn-' + color + '" onClick="removeCard(\'card_' + socket_id + '\');">&times;</a>'
         + '</div>';
@@ -139,8 +139,12 @@ $(function(){
   socketio.on( 'image_client_view', function( msg ){
     var socket_id = msg.uuid; //msg.socket_id;
     if( socket_ids.indexOf( socket_id ) > -1 ){  //. socket_ids == [];
-      $('#image_'+socket_id).prop( 'src', msg.image_src );
-      $('#image_'+socket_id).prop( 'title', msg.comment );
+      var ts = $('#image_'+socket_id).prop( 'ts' );
+      if( msg.ts > ts ){
+        $('#image_'+socket_id).prop( 'src', msg.image_src );
+        $('#image_'+socket_id).prop( 'title', msg.comment );
+        $('#image_'+socket_id).prop( 'ts', msg.ts );
+      }
     }
   });
 });

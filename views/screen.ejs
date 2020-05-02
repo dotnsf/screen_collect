@@ -88,6 +88,7 @@ $(function(){
     room: '<%= room %>',
     name: name,
     width: x,
+    timestamp: ( new Date() ).getTime(),
     height: 480
   };
   socketio.json.emit( 'init_client', msg );
@@ -136,6 +137,7 @@ function video2image(){
     var msg = {
       uuid: uuid,
       room: '<%= room %>',
+      timestamp: ( new Date() ).getTime(),
       image_src: png
     };
     socketio.json.emit( 'image_client', msg );
