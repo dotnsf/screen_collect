@@ -35,7 +35,7 @@ app.get( '/screen', function( req, res ){
   if( !name ){ name = '' + ( new Date() ).getTime(); }
   var room = req.query.room;
   if( !room ){ room = settings.defaultroom; }
-  var intervalms = settings.intervalml;
+  var intervalms = settings.intervalms;
   var _intervalms = req.query.intervalms;
   if( _intervalms ){
     try{

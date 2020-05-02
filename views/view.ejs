@@ -137,13 +137,15 @@ $(function(){
   });
 
   socketio.on( 'image_client_view', function( msg ){
+    console.log( msg );
     var socket_id = msg.uuid; //msg.socket_id;
     if( socket_ids.indexOf( socket_id ) > -1 ){  //. socket_ids == [];
-      var ts = $('#image_'+socket_id).prop( 'ts' );
-      if( msg.ts > ts ){
+      var ts = $('#image_'+socket_id).attr( 'ts' );
+      ts = parseInt( ts );
+      if( msg.timestamp > ts ){
         $('#image_'+socket_id).prop( 'src', msg.image_src );
         $('#image_'+socket_id).prop( 'title', msg.comment );
-        $('#image_'+socket_id).prop( 'ts', msg.ts );
+        $('#image_'+socket_id).prop( 'ts', msg.timestamp );
       }
     }
   });
