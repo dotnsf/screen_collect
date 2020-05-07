@@ -137,7 +137,7 @@ $(function(){
   });
 
   socketio.on( 'image_client_view', function( msg ){
-    console.log( msg );
+    //console.log( msg );
     var socket_id = msg.uuid; //msg.socket_id;
     if( socket_ids.indexOf( socket_id ) > -1 ){  //. socket_ids == [];
       var ts = $('#image_'+socket_id).attr( 'ts' );
@@ -146,6 +146,14 @@ $(function(){
         $('#image_'+socket_id).prop( 'src', msg.image_src );
         $('#image_'+socket_id).prop( 'title', msg.comment );
         $('#image_'+socket_id).prop( 'ts', msg.timestamp );
+
+        //. 拡大画面も更新
+        var zoom_socket_id = $('#zoom_image').attr( 'socket_id' );
+        console.log( 'zoom_socket_id = ' + zoom_socket_id + ', socket_id = ' + socket_id );
+        if( zoom_socket_id && zoom_socket_id == socket_id ){
+          console.log( 'zoom_socket_id.src' );
+          $('#zoom_image').prop( 'src', msg.image_src );
+        }
       }
     }
   });
@@ -183,7 +191,7 @@ function removeCard( card_id ){
 }
 
 function zoomImage( socket_id ){
-  $('#box_content').html( '<img src="' + $('#image_'+socket_id).prop( 'src' ) + '"/>' );
+  $('#box_content').html( '<img id="zoom_image" socket_id="' + socket_id + '" src="' + $('#image_'+socket_id).prop( 'src' ) + '"/>' );
 }
 </script>
 </body>
