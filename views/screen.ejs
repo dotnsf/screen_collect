@@ -96,6 +96,11 @@ $(function(){
   var mediaStreamConstraints = { video: true };
   localVideo = document.querySelector( "video" );
   navigator.mediaDevices.getDisplayMedia( mediaStreamConstraints ).then( gotLocalMediaStream ).catch( handleLocalMediaStreamError );
+
+  socketio.on( 'change_subject_view', function( msg ){
+    console.log( 'change_subject_view', msg );
+    //$('#name').html( msg.subject );
+  });
 });
 
 function generateUUID(){

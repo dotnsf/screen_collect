@@ -64,13 +64,21 @@ html, body{
   }
 }
 .card-group .card{
-  /*max-width: 20%;*/
-  /*max-width: 16%;*/
   max-width: calc(100% /<%= columns %>);
+}
+#subject{
+  color: #008;
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>
 </head>
 <body>
+
+<div>
+<span id="subject">...</span>
+<input class="form-control" id="subject_edit" style="display: none;" value=""/>
+</div>
 
 <canvas id="qrcode"></canvas>
 
@@ -103,6 +111,37 @@ $(function(){
     if( err ){ console.log( err ); }
   });
   */
+  $('#subject').on( 'click', function( e ){
+    $('#subject').css( 'display', 'none' );
+    $('#subject_edit').css( 'display', 'block' );
+  });
+  $('#subject_edit').keyup( function( e ){
+    var key = e.key;
+    if( key == 'Enter' ){
+      var subject = $('#subject_edit').val();
+      $('#subject').html( subject );
+      $('#subject').css( 'display', 'block' );
+      $('#subject_edit').css( 'display', 'none' );
+      //. WebSocket で通知
+      socketio.emit( 'change_subject', { room: '<%= room %>', subject: subject } );
+
+      if( !subject ){
+        $('#subject').html( '...' );
+      }
+    }
+  });
+  $('#subject_edit').focusout( function( e ){
+    var subject = $('#subject_edit').val();
+    $('#subject').html( subject );
+    $('#subject').css( 'display', 'block' );
+    $('#subject_edit').css( 'display', 'none' );
+    //. WebSocket で通知
+    socketio.emit( 'change_subject', { room: '<%= room %>', subject: subject } );
+
+    if( !subject ){
+      $('#subject').html( '...' );
+    }
+  });
 
   socketio.on( 'init_client_view', function( msg ){
     var socket_id = msg.uuid; //msg.socket_id;
