@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<title>Demo App</title>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+<!--
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+-->
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="Demo App for Screen-Collect"/>
+
+<style type="text/css">
+html, body{
+  background-color: #fafafa;
+  font-size: 20px;
+  color: #333;
+}
+#jstext{
+  width: 90%;
+  height: 200px;
+}
+</style>
+<script>
+$(function(){
+});
+
+function JS(){
+  var jstext = $('#jstext').val();
+  //console.log( jstext );
+  eval( jstext );
+}
+</script>
+</head>
+<body>
+
+<div class="container_">
+
+<table width="100%" border="1">
+<tr>
+<th>
+<input type="button" value="JavaScript" onClick="JS();"/>
+</th>
+<th>HTML</th>
+<th>Preview</th>
+</tr>
+<tr>
+<td width="33%">
+&lt;script&gt;<br/>
+$(function(){<br/><blockquote>
+<textarea id="jstext" placeholder="$('#li1').css( 'color', 'red' );">
+</textarea><br/>
+</blockquote>
+});<br/>
+&lt;/script&gt;<br/>
+</td>
+<td width="33%"><pre>
+&lt;div id="xxx"&gt;
+&lt;ul&gt;
+&lt;li id="li1" class="li"&gt;あいうえお&lt;/li&gt;
+&lt;li id="li2" class="li"&gt;かきくけこ&lt;/li&gt;
+&lt;li id="li3" class="li"&gt;さしすせそ&lt;/li&gt;
+&lt;li id="li4" class="li"&gt;たちつてと&lt;/li&gt;
+&lt;li id="li5" class="li"&gt;なにぬねの&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</pre></td>
+<td width="33%">
+<div id="xxx">
+<ul>
+<li id="li1" class="li">あいうえお</li>
+<li id="li2" class="li">かきくけこ</li>
+<li id="li3" class="li">さしすせそ</li>
+<li id="li4" class="li">たちつてと</li>
+<li id="li5" class="li">なにぬねの</li>
+</ul>
+</div>
+</td></tr>
+</table>
+
+</div>
+
+</body>
+</html>
