@@ -4,10 +4,6 @@
 <meta charset="UTF-8"/>
 <title>Demo App</title>
 <script type="text/javascript" src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-<!--
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
--->
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -23,7 +19,11 @@ html, body{
 }
 #jstext{
   width: 90%;
-  height: 200px;
+  height: 400px;
+}
+#htmltext{
+  width: 90%;
+  height: 400px;
 }
 </style>
 <script>
@@ -34,6 +34,12 @@ function JS(){
   var jstext = $('#jstext').val();
   //console.log( jstext );
   eval( jstext );
+}
+
+function HTML(){
+  var htmltext = $('#htmltext').val();
+  //console.log( htmltext );
+  $('#_html').html( htmltext );
 }
 </script>
 </head>
@@ -46,7 +52,9 @@ function JS(){
 <th>
 <input type="button" value="JavaScript" onClick="JS();"/>
 </th>
-<th>HTML</th>
+<th>
+<input type="button" value="HTML" onClick="HTML();"/>
+</th>
 <th>Preview</th>
 </tr>
 <tr>
@@ -59,7 +67,8 @@ $(function(){<br/><blockquote>
 });<br/>
 &lt;/script&gt;<br/>
 </td>
-<td width="33%"><pre>
+<td width="33%">
+<textarea id="htmltext">
 &lt;div id="xxx"&gt;
 &lt;ul&gt;
 &lt;li id="li1" class="li"&gt;あいうえお&lt;/li&gt;
@@ -69,8 +78,9 @@ $(function(){<br/><blockquote>
 &lt;li id="li5" class="li"&gt;なにぬねの&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
-</pre></td>
-<td width="33%">
+</textarea>
+</td>
+<td width="33%" id="_html">
 <div id="xxx">
 <ul>
 <li id="li1" class="li">あいうえお</li>
