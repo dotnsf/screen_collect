@@ -14,42 +14,72 @@
 <style type="text/css">
 html, body{
   background-color: #fafafa;
-  font-size: 14px;
+  font-size: 10px;
   color: #333;
+}
+textarea{
+  font-size: 10px;
+}
+th{
+  width: 25%;
 }
 td{
   padding: 20px;
   text-align: left;
   vertical-align: top;
 }
-#jstext{
-  width: 90%;
-  height: 400px;
-}
-#htmltext{
+.mytexts{
   width: 90%;
   height: 400px;
 }
 #_html{
+  /*
   padding-top: 100px;
   background: url('https://www.illust-pocket.com/wp-content/uploads/2016/07/624.jpg') no-repeat;
   background-size: 100% 100%;
+  */
 }
 </style>
 <script>
 $(function(){
 });
 
-function JS(){
-  var jstext = $('#jstext').val();
-  //console.log( jstext );
-  eval( jstext );
-}
-
 function HTML(){
   var htmltext = $('#htmltext').val();
-  //console.log( htmltext );
   $('#_html').html( htmltext );
+
+  var csstext = $('#csstext').val();
+  if( csstext ){
+    var tmp1 = csstext.split( '}' );
+    for( var i = 0; i < tmp1.length; i ++ ){
+      var tmp2 = tmp1[i].split( '{' );
+      if( tmp2.length == 2 ){
+        var sel = tmp2[0].trim();
+        var attrs = tmp2[1].trim();
+        if( sel && attrs && attrs.indexOf( ';' ) > -1 ){
+          var tmp3 = attrs.split( ';' );
+          for( var j = 0; j < tmp3.length; j ++ ){
+            var tmp4 = tmp3[j].split( ':' );
+            if( tmp4.length == 2 ){
+              var elem = tmp4[0].trim();
+              var vals = tmp4[1].trim();
+              if( vals.length > 1 && ( vals.startsWith( '"' ) && vals.endsWith( '"' ) || vals.startsWith( "'" ) && vals.endsWith( "'" ) ) ){
+                vals = vals.substr( 1, vals.length - 2 );
+              }
+              if( elem && vals ){
+                $(sel).css( elem, vals );
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  var jstext = $('#jstext').val();
+  if( jstext ){
+    eval( jstext );
+  }
 }
 </script>
 </head>
@@ -60,7 +90,10 @@ function HTML(){
 <table width="100%" border="1">
 <tr>
 <th>
-<input type="button" value="JavaScript" onClick="JS();"/>
+<input type="button" value="JavaScript" onClick="HTML();"/>
+</th>
+<th>
+<input type="button" value="CSS" onClick="HTML();"/>
 </th>
 <th>
 <input type="button" value="HTML" onClick="HTML();"/>
@@ -68,17 +101,22 @@ function HTML(){
 <th>Preview</th>
 </tr>
 <tr>
-<td width="33%">
+<td>
 &lt;script&gt;<br/>
-$(function(){<br/><blockquote>
-<textarea id="jstext" placeholder="$('#li1').css( 'color', 'red' );">
+$(function(){<br/>
+<textarea id="jstext" class="mytexts">
 </textarea><br/>
-</blockquote>
 });<br/>
 &lt;/script&gt;<br/>
 </td>
-<td width="33%">
-<textarea id="htmltext">
+<td>
+&lt;style&gt;<br/>
+<textarea id="csstext" class="mytexts">
+</textarea><br/>
+&lt;/style&gt;<br/>
+</td>
+<td>
+<textarea id="htmltext" class="mytexts">
 &lt;div id="xxx"&gt;
 &lt;ul&gt;
 &lt;li id="li1" class="li"&gt;あいうえお&lt;/li&gt;
@@ -90,7 +128,7 @@ $(function(){<br/><blockquote>
 &lt;/div&gt;
 </textarea>
 </td>
-<td width="33%" id="_html" background="https://www.illust-pocket.com/wp-content/uploads/2016/07/624.jpg">
+<td id="_html" class="mytexts">
 <div id="xxx">
 <ul>
 <li id="li1" class="li">あいうえお</li>
