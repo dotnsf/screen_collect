@@ -11,7 +11,7 @@ Social Application, which can **collect** all participant screen in real time.
 
     - I would describe followings as you use IBM Cloud for this environment.
 
-- PC Web Browser
+- PC **Chrome** Web Browser
 
     - Mobile Web Browser is not supported.(Not working)
 
@@ -67,9 +67,16 @@ https://screen-collect.mybluemix.net/
 
 - User might be asked to share their screen. User can choose which application/window/full screen to share. Then click "Share" button.
 
-- Administrator can see user's selected screen image by each 5000 milliseconds by default.
+- Administrator can see user's selected screen image by each 2000 milliseconds by default.
 
 - User can stop sharing when click "Stop sharing" button.
+
+
+## How to run in container environment
+
+This application can be run in container environments like docker or k8s.
+
+But this application does **NOT** support in multi-instanced container environment. Application has to be run as single container.
 
 
 ## Collaborators
@@ -79,4 +86,4 @@ https://screen-collect.mybluemix.net/
 
 ## Copyright
 
-2020 [K.Kimura @ Juge.Me](https://github.com/dotnsf) all rights reserved.
+2020-2021 [K.Kimura @ Juge.Me](https://github.com/dotnsf) all rights reserved.
